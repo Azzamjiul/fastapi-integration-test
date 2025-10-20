@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
-from testcontainers.core.waiting_utils import wait_for_logs
 from testcontainers.core import utils
 from testcontainers.postgres import PostgresContainer
 
@@ -38,6 +37,7 @@ def initialize_test_db(engine):
 def postgres_container() -> PostgresContainer:
     """
     Setup postgres container
+    PostgresContainer has built-in wait strategy, no need to specify custom one
     """
     postgres = PostgresContainer(
         image=POSTGRES_IMAGE,
@@ -47,11 +47,6 @@ def postgres_container() -> PostgresContainer:
         port=POSTGRES_CONTAINER_PORT,
     )
     with postgres:
-        wait_for_logs(
-            postgres,
-            r"UTC \[1\] LOG:  database system is ready to accept connections",
-            10,
-        )
         yield postgres
 
 

@@ -14,3 +14,10 @@ dependencies = [
     "testcontainers>=4.13.2",
     "uvicorn>=0.37.0",
 ]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    # Ignore deprecation warnings from testcontainers library internals
+    # These are internal to the library and will be fixed by testcontainers maintainers
+    "ignore:The @wait_container_is_ready decorator is deprecated:DeprecationWarning:testcontainers",
+]
